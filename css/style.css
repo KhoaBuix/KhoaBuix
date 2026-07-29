@@ -1,4 +1,6 @@
-/* ===== Reset & Base ===== */
+/* ===== RESET & CƠ BẢN =====
+   Reset: xóa margin/padding mặc định của trình duyệt để dễ kiểm soát giao diện.
+   box-sizing: border-box giúp width/height tính luôn cả border + padding, dễ tính toán kích thước hơn. */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
@@ -14,6 +16,8 @@ ul { list-style: none; }
 button { font-family: inherit; cursor: pointer; border: none; background: none; }
 input, select, textarea { font-family: inherit; font-size: 1rem; }
 
+/* Biến CSS (custom properties): khai báo 1 lần, dùng lại khắp nơi qua var(--tên-biến).
+   Muốn đổi tông màu toàn bộ trang, chỉ cần sửa ở đây thay vì tìm từng chỗ. */
 :root {
   --primary: #b8452e;
   --primary-dark: #8f3120;
@@ -61,7 +65,9 @@ input, select, textarea { font-family: inherit; font-size: 1rem; }
 .section-head { text-align: center; max-width: 640px; margin: 0 auto 48px; }
 .section-head .section-sub { margin: 0 auto; }
 
-/* ===== Buttons ===== */
+/* ===== NÚT BẤM (BUTTONS) =====
+   .btn là style dùng chung; .btn--primary (nút màu cam đậm) và .btn--outline (nút viền trong suốt)
+   là 2 biến thể được thêm vào cùng lúc với .btn trong HTML (ví dụ class="btn btn--primary"). */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -86,7 +92,9 @@ input, select, textarea { font-family: inherit; font-size: 1rem; }
 .btn--outline:hover { background: rgba(255,255,255,0.15); }
 .btn--block { width: 100%; }
 
-/* ===== Header ===== */
+/* ===== HEADER (THANH ĐIỀU HƯỚNG TRÊN CÙNG) =====
+   position: fixed giữ header luôn dính ở trên cùng màn hình dù cuộn trang.
+   Class .scrolled được JS thêm vào khi cuộn > 40px, đổi nền từ trong suốt sang màu kem mờ. */
 .header {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -149,6 +157,8 @@ input, select, textarea { font-family: inherit; font-size: 1rem; }
 }
 .header.scrolled .burger span { background: var(--dark); }
 
+/* @media (max-width: 900px): quy tắc CSS bên trong chỉ áp dụng khi màn hình rộng <= 900px (tablet/mobile).
+   Đây là cách làm giao diện "responsive" - tự thích ứng với kích thước màn hình khác nhau. */
 @media (max-width: 900px) {
   .nav-cta { display: none; }
   .nav {
@@ -173,7 +183,9 @@ input, select, textarea { font-family: inherit; font-size: 1rem; }
   .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 }
 
-/* ===== Hero ===== */
+/* ===== HERO (BANNER LỚN ĐẦU TRANG) =====
+   min-height: 100vh làm banner cao đúng bằng chiều cao màn hình.
+   Các gradient (radial-gradient, linear-gradient) tạo hiệu ứng nền tối có ánh sáng màu cam/vàng, không cần ảnh thật. */
 .hero {
   position: relative;
   min-height: 100vh;
@@ -243,7 +255,8 @@ input, select, textarea { font-family: inherit; font-size: 1rem; }
   100% { top: 26px; opacity: 0; }
 }
 
-/* ===== About ===== */
+/* ===== ABOUT (GIỚI THIỆU) =====
+   display: grid chia khu vực thành 2 cột (ảnh bên trái, chữ bên phải) - xem grid-template-columns: 1fr 1fr. */
 .about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
 .about__media { position: relative; height: 460px; }
 .about__img {
@@ -292,7 +305,9 @@ input, select, textarea { font-family: inherit; font-size: 1rem; }
   .about__media { height: 340px; }
 }
 
-/* ===== Menu ===== */
+/* ===== MENU (THỰC ĐƠN) =====
+   .menu__tab.active: kiểu dáng cho nút tab đang được chọn (đổi từ viền sang nền màu cam).
+   .menu-card: mỗi thẻ món ăn, được JavaScript tạo ra động trong js/script.js (hàm renderMenu). */
 .menu__tabs {
   display: flex;
   justify-content: center;
@@ -343,7 +358,8 @@ input, select, textarea { font-family: inherit; font-size: 1rem; }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ===== Gallery ===== */
+/* ===== GALLERY (LƯỚI HÌNH ẢNH) =====
+   grid-auto-rows + grid-row: span 2 tạo bố cục lưới không đều nhau (kiểu Pinterest), 2 ô lớn hơn các ô còn lại. */
 .gallery__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -368,7 +384,9 @@ input, select, textarea { font-family: inherit; font-size: 1rem; }
   .gallery__item--1, .gallery__item--5 { grid-row: span 1; }
 }
 
-/* ===== Reservation ===== */
+/* ===== RESERVATION (ĐẶT BÀN) =====
+   .form-group.invalid: khi JS phát hiện ô nhập bị lỗi sẽ thêm class "invalid" ở đây,
+   CSS sẽ tự đổi viền đỏ và hiện dòng thông báo lỗi (.form-error). */
 .reservation {
   background: linear-gradient(160deg, #201812 0%, #2a1c14 100%);
   position: relative;
@@ -423,7 +441,8 @@ input, select, textarea { font-family: inherit; font-size: 1rem; }
   .reservation__form { padding: 24px; }
 }
 
-/* ===== Testimonials ===== */
+/* ===== TESTIMONIALS (ĐÁNH GIÁ KHÁCH HÀNG) =====
+   Lưới 3 cột chứa các thẻ đánh giá, mỗi thẻ gồm sao, nội dung, và avatar chữ cái đầu tên khách. */
 .testimonials__track {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -452,7 +471,8 @@ input, select, textarea { font-family: inherit; font-size: 1rem; }
 
 @media (max-width: 900px) { .testimonials__track { grid-template-columns: 1fr; } }
 
-/* ===== Contact ===== */
+/* ===== CONTACT (LIÊN HỆ) =====
+   Cột trái: thông tin liên hệ; cột phải: bản đồ Google Maps nhúng qua iframe (xem index.html). */
 .contact__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
 .contact__items { margin: 28px 0; }
 .contact__item { display: flex; gap: 16px; margin-bottom: 22px; }
@@ -477,12 +497,13 @@ input, select, textarea { font-family: inherit; font-size: 1rem; }
 
 @media (max-width: 900px) { .contact__grid { grid-template-columns: 1fr; } }
 
-/* ===== Footer ===== */
+/* ===== FOOTER (CHÂN TRANG) ===== */
 .footer { background: #150e0a; padding: 40px 0; }
 .footer__inner { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
 .footer p { color: rgba(255,255,255,0.55); font-size: 0.85rem; }
 
-/* ===== Back to top ===== */
+/* ===== NÚT "LÊN ĐẦU TRANG" =====
+   Mặc định ẩn (opacity: 0, visibility: hidden). Class .show (do JS thêm khi cuộn > 500px) sẽ hiện nút lên. */
 .back-to-top {
   position: fixed;
   bottom: 28px; right: 28px;
@@ -502,7 +523,9 @@ input, select, textarea { font-family: inherit; font-size: 1rem; }
 .back-to-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
 .back-to-top:hover { background: var(--primary-dark); }
 
-/* ===== Scroll reveal ===== */
+/* ===== HIỆU ỨNG "HIỆN DẦN" KHI CUỘN TỚI =====
+   Mọi phần tử có thuộc tính data-aos ban đầu mờ và lệch xuống (opacity: 0, translateY: 30px).
+   Khi JS phát hiện phần tử lọt vào khung nhìn, sẽ thêm class "in-view" để nó hiện rõ dần (transition). */
 [data-aos] {
   opacity: 0;
   transform: translateY(30px);

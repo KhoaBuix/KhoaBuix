@@ -1,108 +1,123 @@
 <!DOCTYPE html>
-<html lang="vi">
+<!-- lang="fr" báo cho trình duyệt biết nội dung trang là tiếng Pháp (hỗ trợ đọc màn hình, SEO...) -->
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hương Việt - Nhà Hàng Ẩm Thực Việt Nam</title>
-<meta name="description" content="Nhà hàng Hương Việt - Tinh hoa ẩm thực Việt Nam, không gian ấm cúng, đặt bàn dễ dàng.">
+<!-- <title> hiện trên tab trình duyệt -->
+<title>Hương Việt - Restaurant de Cuisine Vietnamienne</title>
+<!-- meta description: đoạn mô tả ngắn, Google dùng để hiện trong kết quả tìm kiếm -->
+<meta name="description" content="Restaurant Hương Việt - l'essence de la cuisine vietnamienne, une ambiance chaleureuse, réservation facile.">
+<!-- Nạp font chữ từ Google Fonts: Playfair Display (tiêu đề) và Be Vietnam Pro (nội dung) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- Nạp file CSS riêng để định dạng giao diện -->
 <link rel="stylesheet" href="css/style.css">
+<!-- Favicon (icon nhỏ trên tab trình duyệt), ở đây dùng luôn emoji bát phở thay vì file ảnh -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍜</text></svg>">
 </head>
 <body>
 
-<!-- Header -->
+<!-- ============ HEADER: thanh điều hướng cố định trên cùng, đổi màu nền khi cuộn trang (xử lý bằng js/script.js) ============ -->
 <header class="header" id="header">
   <div class="container header__inner">
+    <!-- Logo / tên thương hiệu, giữ nguyên tên tiếng Việt vì đây là tên riêng của nhà hàng -->
     <a href="#home" class="logo">Hương <span>Việt</span></a>
+    <!-- Menu điều hướng: mỗi thẻ <a href="#id"> sẽ cuộn tới section có id tương ứng -->
     <nav class="nav" id="nav">
-      <a href="#home">Trang chủ</a>
-      <a href="#about">Giới thiệu</a>
-      <a href="#menu">Thực đơn</a>
-      <a href="#gallery">Không gian</a>
-      <a href="#testimonials">Đánh giá</a>
-      <a href="#contact">Liên hệ</a>
+      <a href="#home">Accueil</a>
+      <a href="#about">À propos</a>
+      <a href="#menu">Menu</a>
+      <a href="#gallery">Ambiance</a>
+      <a href="#testimonials">Avis</a>
+      <a href="#contact">Contact</a>
     </nav>
-    <a href="#reservation" class="btn btn--primary nav-cta">Đặt bàn</a>
-    <button class="burger" id="burger" aria-label="Mở menu">
+    <!-- Nút "Réserver" chỉ hiện trên màn hình lớn, trên mobile bị ẩn (xem CSS .nav-cta) -->
+    <a href="#reservation" class="btn btn--primary nav-cta">Réserver</a>
+    <!-- Nút hamburger (3 gạch) chỉ hiện trên mobile, bấm vào để mở/đóng menu (js/script.js) -->
+    <button class="burger" id="burger" aria-label="Ouvrir le menu">
       <span></span><span></span><span></span>
     </button>
   </div>
 </header>
 
-<!-- Hero -->
+<!-- ============ HERO: phần banner lớn đầu trang, gây ấn tượng đầu tiên với khách ============ -->
 <section class="hero" id="home">
   <div class="hero__overlay"></div>
   <div class="container hero__content" data-aos>
-    <p class="hero__kicker">Chào mừng đến với</p>
-    <h1 class="hero__title">Nhà Hàng <span>Hương Việt</span></h1>
-    <p class="hero__desc">Tinh hoa ẩm thực Việt trong từng món ăn — nơi hương vị truyền thống hòa quyện cùng không gian hiện đại, ấm cúng.</p>
+    <p class="hero__kicker">Bienvenue au</p>
+    <h1 class="hero__title">Restaurant <span>Hương Việt</span></h1>
+    <p class="hero__desc">L'essence de la cuisine vietnamienne dans chaque plat — où les saveurs traditionnelles rencontrent une ambiance moderne et chaleureuse.</p>
     <div class="hero__actions">
-      <a href="#reservation" class="btn btn--primary">Đặt bàn ngay</a>
-      <a href="#menu" class="btn btn--outline">Xem thực đơn</a>
+      <a href="#reservation" class="btn btn--primary">Réserver maintenant</a>
+      <a href="#menu" class="btn btn--outline">Voir le menu</a>
     </div>
   </div>
-  <a href="#about" class="scroll-down" aria-label="Cuộn xuống"><span></span></a>
+  <!-- Mũi tên nhấp nháy gợi ý khách cuộn xuống, hiệu ứng ở CSS (.scroll-down) -->
+  <a href="#about" class="scroll-down" aria-label="Défiler vers le bas"><span></span></a>
 </section>
 
-<!-- About -->
+<!-- ============ ABOUT: giới thiệu câu chuyện, thế mạnh của nhà hàng ============ -->
 <section class="section about" id="about">
   <div class="container about__grid">
+    <!-- Cột trái: 2 khối màu (thay cho ảnh thật) + huy hiệu số năm kinh nghiệm -->
     <div class="about__media" data-aos>
       <div class="about__img about__img--1"></div>
       <div class="about__img about__img--2"></div>
       <div class="about__badge">
         <strong>15+</strong>
-        <span>năm kinh nghiệm</span>
+        <span>ans d'expérience</span>
       </div>
     </div>
+    <!-- Cột phải: đoạn văn giới thiệu + danh sách điểm mạnh + số liệu thống kê -->
     <div class="about__text" data-aos>
-      <p class="section-kicker">Câu chuyện của chúng tôi</p>
-      <h2 class="section-title">Đam mê ẩm thực, <br>trọn vẹn hương vị Việt</h2>
-      <p>Ra đời từ năm 2009, Hương Việt luôn giữ trọn triết lý "nấu bằng cả trái tim". Chúng tôi chọn lọc nguyên liệu tươi ngon mỗi ngày, kết hợp công thức gia truyền cùng sự sáng tạo để mang đến những món ăn đậm đà bản sắc ba miền.</p>
+      <p class="section-kicker">Notre histoire</p>
+      <h2 class="section-title">Passion culinaire, <br>saveurs vietnamiennes authentiques</h2>
+      <p>Fondé en 2009, Hương Việt reste fidèle à sa philosophie : « cuisiner avec le cœur ». Nous sélectionnons chaque jour des ingrédients frais et de qualité, en alliant recettes familiales et créativité pour vous offrir des plats riches en saveurs, représentatifs des trois régions du Vietnam.</p>
       <ul class="about__list">
-        <li><span>🥢</span> Nguyên liệu tươi sạch, chọn lọc mỗi ngày</li>
-        <li><span>👨‍🍳</span> Đầu bếp giàu kinh nghiệm, tận tâm</li>
-        <li><span>🏮</span> Không gian ấm cúng, đậm chất Việt</li>
+        <li><span>🥢</span> Ingrédients frais, sélectionnés chaque jour</li>
+        <li><span>👨‍🍳</span> Chefs expérimentés et passionnés</li>
+        <li><span>🏮</span> Ambiance chaleureuse, à l'esprit vietnamien</li>
       </ul>
       <div class="about__stats">
-        <div><strong>20+</strong><span>Món đặc sản</span></div>
-        <div><strong>10k+</strong><span>Khách hàng hài lòng</span></div>
-        <div><strong>4.9★</strong><span>Đánh giá trung bình</span></div>
+        <div><strong>20+</strong><span>Plats signature</span></div>
+        <div><strong>10k+</strong><span>Clients satisfaits</span></div>
+        <div><strong>4.9★</strong><span>Note moyenne</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Menu -->
+<!-- ============ MENU: thực đơn, có nút lọc theo danh mục (JS render nội dung động, xem MENU_DATA trong script.js) ============ -->
 <section class="section menu" id="menu">
   <div class="container">
     <div class="section-head" data-aos>
-      <p class="section-kicker">Thực đơn</p>
-      <h2 class="section-title">Món ăn đặc trưng</h2>
-      <p class="section-sub">Được yêu thích nhất bởi thực khách của chúng tôi</p>
+      <p class="section-kicker">Menu</p>
+      <h2 class="section-title">Nos spécialités</h2>
+      <p class="section-sub">Les plus appréciés par nos clients</p>
     </div>
 
+    <!-- Các nút tab: data-tab phải khớp với "key" trong MENU_DATA ở script.js -->
     <div class="menu__tabs" id="menuTabs">
-      <button class="menu__tab active" data-tab="khaivi">Khai vị</button>
-      <button class="menu__tab" data-tab="mon-chinh">Món chính</button>
-      <button class="menu__tab" data-tab="trang-mieng">Tráng miệng</button>
-      <button class="menu__tab" data-tab="do-uong">Đồ uống</button>
+      <button class="menu__tab active" data-tab="khaivi">Entrées</button>
+      <button class="menu__tab" data-tab="mon-chinh">Plats principaux</button>
+      <button class="menu__tab" data-tab="trang-mieng">Desserts</button>
+      <button class="menu__tab" data-tab="do-uong">Boissons</button>
     </div>
 
+    <!-- Nơi JavaScript sẽ chèn (render) danh sách món ăn vào, ban đầu để trống -->
     <div class="menu__grid" id="menuGrid">
-      <!-- injected by JS -->
+      <!-- được điền tự động bởi js/script.js -->
     </div>
   </div>
 </section>
 
-<!-- Gallery -->
+<!-- ============ GALLERY: lưới hình ảnh không gian nhà hàng (dùng khối màu gradient thay ảnh thật) ============ -->
 <section class="section gallery" id="gallery">
   <div class="container">
     <div class="section-head" data-aos>
-      <p class="section-kicker">Không gian</p>
-      <h2 class="section-title">Khoảnh khắc tại Hương Việt</h2>
+      <p class="section-kicker">Ambiance</p>
+      <h2 class="section-title">Moments chez Hương Việt</h2>
     </div>
     <div class="gallery__grid" data-aos>
       <div class="gallery__item gallery__item--1"></div>
@@ -115,144 +130,152 @@
   </div>
 </section>
 
-<!-- Reservation -->
+<!-- ============ RESERVATION: phần đặt bàn, gồm thông tin liên hệ + form đặt bàn (validate bằng JS) ============ -->
 <section class="section reservation" id="reservation">
   <div class="container reservation__grid">
+    <!-- Cột trái: giới thiệu ngắn + thông tin liên hệ nhanh -->
     <div class="reservation__info" data-aos>
-      <p class="section-kicker section-kicker--light">Đặt bàn</p>
-      <h2 class="section-title section-title--light">Giữ chỗ cho bữa ăn hoàn hảo</h2>
-      <p class="reservation__desc">Đặt bàn trước để đảm bảo có chỗ ngồi ưng ý, đặc biệt vào cuối tuần và các dịp lễ.</p>
+      <p class="section-kicker section-kicker--light">Réservation</p>
+      <h2 class="section-title section-title--light">Réservez votre table pour un repas parfait</h2>
+      <p class="reservation__desc">Réservez à l'avance pour garantir une place, surtout le week-end et les jours fériés.</p>
       <div class="reservation__contact">
         <div><span>📍</span><p>123 Đường Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh</p></div>
         <div><span>📞</span><p>0909 123 456</p></div>
-        <div><span>🕑</span><p>10:00 - 22:00 (Tất cả các ngày)</p></div>
+        <div><span>🕑</span><p>10h00 - 22h00 (tous les jours)</p></div>
       </div>
     </div>
+    <!-- Cột phải: form đặt bàn. Mỗi .form-group có 1 ô nhập + 1 <span class="form-error"> để hiện lỗi -->
     <form class="reservation__form" id="reservationForm" data-aos novalidate>
-      <h3>Đặt bàn trực tuyến</h3>
+      <h3>Réservation en ligne</h3>
       <div class="form-row">
         <div class="form-group">
-          <label for="name">Họ và tên *</label>
-          <input type="text" id="name" name="name" placeholder="Nguyễn Văn A" required>
+          <label for="name">Nom complet *</label>
+          <input type="text" id="name" name="name" placeholder="Jean Dupont" required>
           <span class="form-error"></span>
         </div>
         <div class="form-group">
-          <label for="phone">Số điện thoại *</label>
-          <input type="tel" id="phone" name="phone" placeholder="09xxxxxxxx" required>
+          <label for="phone">Téléphone *</label>
+          <input type="tel" id="phone" name="phone" placeholder="06xxxxxxxx" required>
           <span class="form-error"></span>
         </div>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="date">Ngày *</label>
+          <label for="date">Date *</label>
           <input type="date" id="date" name="date" required>
           <span class="form-error"></span>
         </div>
         <div class="form-group">
-          <label for="time">Giờ *</label>
+          <label for="time">Heure *</label>
           <input type="time" id="time" name="time" required>
           <span class="form-error"></span>
         </div>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="guests">Số khách *</label>
+          <label for="guests">Nombre de convives *</label>
           <select id="guests" name="guests" required>
-            <option value="">Chọn số khách</option>
-            <option value="1-2">1 - 2 người</option>
-            <option value="3-4">3 - 4 người</option>
-            <option value="5-8">5 - 8 người</option>
-            <option value="8+">Trên 8 người</option>
+            <option value="">Choisissez le nombre de convives</option>
+            <option value="1-2">1 - 2 personnes</option>
+            <option value="3-4">3 - 4 personnes</option>
+            <option value="5-8">5 - 8 personnes</option>
+            <option value="8+">Plus de 8 personnes</option>
           </select>
           <span class="form-error"></span>
         </div>
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="email" id="email" name="email" placeholder="ban@email.com">
+          <input type="email" id="email" name="email" placeholder="vous@email.com">
           <span class="form-error"></span>
         </div>
       </div>
       <div class="form-group">
-        <label for="note">Ghi chú</label>
-        <textarea id="note" name="note" rows="3" placeholder="Yêu cầu đặc biệt (nếu có)..."></textarea>
+        <label for="note">Remarques</label>
+        <textarea id="note" name="note" rows="3" placeholder="Demande particulière (le cas échéant)..."></textarea>
       </div>
-      <button type="submit" class="btn btn--primary btn--block">Xác nhận đặt bàn</button>
-      <p class="form-success" id="formSuccess">✅ Cảm ơn bạn! Yêu cầu đặt bàn đã được ghi nhận, nhà hàng sẽ liên hệ xác nhận sớm nhất.</p>
+      <!-- Nút submit: khi bấm sẽ chạy hàm validate trong script.js trước khi hiện thông báo thành công -->
+      <button type="submit" class="btn btn--primary btn--block">Confirmer la réservation</button>
+      <p class="form-success" id="formSuccess">✅ Merci ! Votre demande de réservation a été enregistrée, le restaurant vous contactera bientôt pour confirmation.</p>
     </form>
   </div>
 </section>
 
-<!-- Testimonials -->
+<!-- ============ TESTIMONIALS: đánh giá / cảm nhận của khách hàng ============ -->
 <section class="section testimonials" id="testimonials">
   <div class="container">
     <div class="section-head" data-aos>
-      <p class="section-kicker">Đánh giá</p>
-      <h2 class="section-title">Khách hàng nói gì về chúng tôi</h2>
+      <p class="section-kicker">Avis</p>
+      <h2 class="section-title">Ce que disent nos clients</h2>
     </div>
     <div class="testimonials__track" id="testimonialsTrack">
       <div class="testimonial-card">
         <div class="testimonial-card__stars">★★★★★</div>
-        <p>"Món phở ở đây đậm đà, nước dùng thanh ngọt tự nhiên. Không gian sạch sẽ, nhân viên phục vụ rất nhiệt tình."</p>
+        <p>"Le pho ici est savoureux, le bouillon naturellement sucré et raffiné. L'endroit est propre et le personnel très attentionné."</p>
         <div class="testimonial-card__author">
           <div class="avatar">L</div>
-          <div><strong>Lan Anh</strong><span>Khách hàng thân thiết</span></div>
+          <div><strong>Lan Anh</strong><span>Cliente fidèle</span></div>
         </div>
       </div>
       <div class="testimonial-card">
         <div class="testimonial-card__stars">★★★★★</div>
-        <p>"Đặt bàn online rất tiện, đến nơi đã có bàn sẵn. Món ăn trình bày đẹp mắt và ngon đúng vị Việt Nam."</p>
+        <p>"La réservation en ligne est très pratique, la table était prête à notre arrivée. Les plats sont magnifiquement présentés et ont un goût authentiquement vietnamien."</p>
         <div class="testimonial-card__author">
           <div class="avatar">M</div>
-          <div><strong>Minh Tuấn</strong><span>Food blogger</span></div>
+          <div><strong>Minh Tuấn</strong><span>Blogueur culinaire</span></div>
         </div>
       </div>
       <div class="testimonial-card">
         <div class="testimonial-card__stars">★★★★★</div>
-        <p>"Không gian ấm cúng, phù hợp cho cả gia đình lẫn tiếp khách. Sẽ quay lại nhiều lần nữa!"</p>
+        <p>"Une ambiance chaleureuse, parfaite en famille comme pour recevoir des invités. On y reviendra avec plaisir !"</p>
         <div class="testimonial-card__author">
           <div class="avatar">H</div>
-          <div><strong>Hoàng Yến</strong><span>Khách hàng</span></div>
+          <div><strong>Hoàng Yến</strong><span>Cliente</span></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Contact -->
+<!-- ============ CONTACT: thông tin liên hệ chi tiết + bản đồ Google Maps nhúng (iframe) ============ -->
 <section class="section contact" id="contact">
   <div class="container contact__grid">
     <div data-aos>
-      <p class="section-kicker">Liên hệ</p>
-      <h2 class="section-title">Ghé thăm chúng tôi</h2>
-      <p class="section-sub">Rất hân hạnh được đón tiếp quý khách</p>
+      <p class="section-kicker">Contact</p>
+      <h2 class="section-title">Venez nous rendre visite</h2>
+      <p class="section-sub">Nous serons ravis de vous accueillir</p>
       <div class="contact__items">
-        <div class="contact__item"><span>📍</span><div><strong>Địa chỉ</strong><p>123 Đường Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh</p></div></div>
-        <div class="contact__item"><span>📞</span><div><strong>Điện thoại</strong><p>0909 123 456</p></div></div>
+        <div class="contact__item"><span>📍</span><div><strong>Adresse</strong><p>123 Đường Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh</p></div></div>
+        <div class="contact__item"><span>📞</span><div><strong>Téléphone</strong><p>0909 123 456</p></div></div>
         <div class="contact__item"><span>✉️</span><div><strong>Email</strong><p>lienhe@huongviet.vn</p></div></div>
-        <div class="contact__item"><span>🕑</span><div><strong>Giờ mở cửa</strong><p>10:00 - 22:00 tất cả các ngày</p></div></div>
+        <div class="contact__item"><span>🕑</span><div><strong>Heures d'ouverture</strong><p>10h00 - 22h00 tous les jours</p></div></div>
       </div>
+      <!-- Mạng xã hội: hiện chỉ là link giữ chỗ (href="#"), cần thay bằng link thật sau này -->
       <div class="contact__socials">
         <a href="#" aria-label="Facebook">Facebook</a>
         <a href="#" aria-label="Instagram">Instagram</a>
         <a href="#" aria-label="Zalo">Zalo</a>
       </div>
     </div>
+    <!-- Bản đồ Google Maps nhúng qua iframe: cần có internet để tải, sẽ hoạt động khi trang được deploy thật -->
     <div class="contact__map" data-aos>
-      <iframe title="Bản đồ nhà hàng" src="https://www.google.com/maps?q=Nguyen+Hue,Ho+Chi+Minh+City&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <iframe title="Carte du restaurant" src="https://www.google.com/maps?q=Nguyen+Hue,Ho+Chi+Minh+City&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
   </div>
 </section>
 
-<!-- Footer -->
+<!-- ============ FOOTER: chân trang, thường chỉ chứa logo và dòng bản quyền ============ -->
 <footer class="footer">
   <div class="container footer__inner">
     <a href="#home" class="logo logo--light">Hương <span>Việt</span></a>
-    <p>© <span id="year"></span> Nhà hàng Hương Việt. Đã đăng ký bản quyền.</p>
+    <!-- #year được JS điền năm hiện tại tự động, không cần sửa tay mỗi năm -->
+    <p>© <span id="year"></span> Restaurant Hương Việt. Tous droits réservés.</p>
   </div>
 </footer>
 
-<button class="back-to-top" id="backToTop" aria-label="Lên đầu trang">↑</button>
+<!-- Nút "lên đầu trang", chỉ hiện khi cuộn xuống đủ xa (xử lý bằng js/script.js) -->
+<button class="back-to-top" id="backToTop" aria-label="Retour en haut">↑</button>
 
+<!-- Nạp file JavaScript ở cuối body để trang HTML hiển thị trước, script chạy sau -->
 <script src="js/script.js"></script>
 </body>
 </html>
