@@ -1,14 +1,22 @@
-// ============ DỮ LIỆU THỰC ĐƠN ============
-// Đây là "database" tạm thời nằm ngay trong code (chưa có backend thật).
-// Mỗi key ("khaivi", "mon-chinh"...) tương ứng với thuộc tính data-tab của nút tab trong index.html.
-// Mỗi món ăn là 1 object gồm: icon (emoji thay ảnh), name (tên món), price (giá), desc (mô tả).
-const MENU_DATA = {
-  khaivi: [
+// ============ CẤU HÌNH GOOGLE SHEETS (DÙNG LÀM "DATABASE" CHO THỰC ĐƠN) ============
+// Dán link CSV lấy được sau khi "Publish to web" Google Sheet của bạn vào biến này
+// (xem hướng dẫn từng bước ở phần chat). Ví dụ link đúng sẽ có dạng:
+// https://docs.google.com/spreadsheets/d/e/2PACX-xxxxxxxx/pub?output=csv
+const MENU_SHEET_CSV_URL = 'DÁN_LINK_CSV_GOOGLE_SHEETS_VÀO_ĐÂY';
+
+// ============ DỮ LIỆU DỰ PHÒNG (FALLBACK) ============
+// Đây là "lưới an toàn": nếu bạn chưa dán link ở trên, hoặc Google Sheets tạm thời không
+// tải được (mất mạng, đổi link, sheet bị xóa quyền xem...), trang web sẽ tự động dùng
+// dữ liệu này thay vì bị vỡ / hiện trang trắng.
+// Cấu trúc: key là tên danh mục (phải viết giống hệt giá trị trong cột "category" trên Sheets),
+// value là mảng các món ăn { icon, name, price, desc }.
+const FALLBACK_MENU_DATA = {
+  'Entrées': [
     { icon: '🥗', name: 'Rouleaux de printemps aux crevettes et porc', price: '45.000đ', desc: 'Rouleaux frais aux crevettes, porc, vermicelles et herbes aromatiques, servis avec une sauce nuoc-mâm aigre-douce.' },
     { icon: '🍤', name: 'Nems aux fruits de mer', price: '55.000đ', desc: 'Nems croustillants farcis de crevettes et de calamars, servis avec des herbes fraîches et une sauce spéciale.' },
     { icon: '🥘', name: "Soupe de crabe à l'œuf de cent ans", price: '40.000đ', desc: "Soupe de crabe onctueuse et parfumée, relevée par l'œuf de cent ans." },
   ],
-  'mon-chinh': [
+  'Plats principaux': [
     { icon: '🍜', name: 'Pho au bœuf (tendre et poitrine)', price: '65.000đ', desc: 'Bouillon mijoté 12 heures, nouilles de riz moelleuses, fines tranches de bœuf frais.' },
     { icon: '🍲', name: 'Bún bò Huế (soupe épicée de Huế)', price: '60.000đ', desc: 'Saveur épicée typique de Huế, avec jarret de porc et pâté de crabe.' },
     { icon: '🍛', name: 'Riz brisé au porc grillé, couenne et pâté', price: '58.000đ', desc: "Côtelette de porc grillée parfumée, couenne croustillante et pâté d'œuf fondant." },
@@ -16,17 +24,101 @@ const MENU_DATA = {
     { icon: '🍚', name: 'Riz frit aux fruits de mer', price: '70.000đ', desc: 'Riz doré sauté avec crevettes, calamars et légumes frais.' },
     { icon: '🍢', name: 'Fondue thaïe aux fruits de mer', price: '250.000đ', desc: 'Fondue acidulée et épicée pour 3 à 4 personnes, généreusement garnie de fruits de mer frais.' },
   ],
-  'trang-mieng': [
+  'Desserts': [
     { icon: '🍮', name: 'Dessert khúc bạch (gelée de lait aux amandes)', price: '35.000đ', desc: 'Frais et léger, à base de gelée de lait, amandes et longanes.' },
     { icon: '🍨', name: 'Glace au riz gluant et à la noix de coco', price: '38.000đ', desc: 'Glace onctueuse à la noix de coco sur un lit de riz gluant parfumé.' },
     { icon: '🍡', name: 'Flan au caramel', price: '30.000đ', desc: "Onctueux et parfumé, un flan aux œufs et au caramel légèrement amer." },
   ],
-  'do-uong': [
+  'Boissons': [
     { icon: '🍵', name: 'Thé au lotus doré', price: '32.000đ', desc: 'Thé infusé au lotus naturel, doux et apaisant.' },
     { icon: '🥥', name: 'Eau de coco fraîche', price: '35.000đ', desc: 'Noix de coco fraîche entière, rafraîchissante et désaltérante.' },
     { icon: '☕', name: 'Café glacé au lait concentré', price: '29.000đ', desc: 'Un café corsé, préparé selon la méthode traditionnelle vietnamienne au filtre.' },
   ],
 };
+
+// Thứ tự tab mong muốn hiển thị; danh mục nào có trên Sheets nhưng không nằm trong danh sách
+// này (ví dụ bạn tự thêm 1 danh mục mới) sẽ được tự động xếp thêm vào cuối.
+const CATEGORY_ORDER = ['Entrées', 'Plats principaux', 'Desserts', 'Boissons'];
+
+// Biến lưu dữ liệu thực đơn ĐANG được dùng để hiển thị (mặc định = dữ liệu dự phòng,
+// sẽ được thay bằng dữ liệu thật từ Google Sheets nếu tải thành công — xem initMenu() bên dưới).
+let currentMenuData = FALLBACK_MENU_DATA;
+
+// escapeHtml: chuyển ký tự đặc biệt (<, >, &...) thành dạng an toàn trước khi chèn vào HTML.
+// Bắt buộc phải làm vậy vì dữ liệu lấy từ Google Sheets là "nguồn bên ngoài" — nếu ai đó (vô tình
+// hay cố ý) gõ mã HTML/script vào ô trên Sheets, escapeHtml sẽ ngăn nó chạy như code thật (chống XSS).
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text ?? '';
+  return div.innerHTML;
+}
+
+// parseCSV: tự viết 1 hàm nhỏ để đọc văn bản CSV thành mảng các dòng/cột.
+// Phải tự xử lý dấu ngoặc kép (") vì Google Sheets sẽ bọc ô nào có dấu phẩy hoặc xuống dòng
+// bên trong bằng dấu ngoặc kép (ví dụ mô tả món ăn có dấu phẩy) — nếu tách chuỗi đơn giản bằng
+// split(',') thì sẽ bị tách sai ở những ô đó.
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
+  let field = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    if (inQuotes) {
+      if (char === '"' && text[i + 1] === '"') { field += '"'; i++; } // dấu " lặp đôi nghĩa là 1 dấu " thật trong nội dung
+      else if (char === '"') { inQuotes = false; }
+      else { field += char; }
+    } else if (char === '"') {
+      inQuotes = true;
+    } else if (char === ',') {
+      row.push(field); field = '';
+    } else if (char === '\n' || char === '\r') {
+      if (char === '\r' && text[i + 1] === '\n') i++; // bỏ qua \n thừa khi xuống dòng kiểu Windows (\r\n)
+      row.push(field); field = '';
+      rows.push(row); row = [];
+    } else {
+      field += char;
+    }
+  }
+  if (field !== '' || row.length) { row.push(field); rows.push(row); }
+
+  return rows.filter(r => r.some(cell => cell.trim() !== '')); // bỏ các dòng hoàn toàn trống
+}
+
+// loadMenuFromSheet: tải file CSV từ Google Sheets rồi chuyển thành object giống FALLBACK_MENU_DATA.
+// Trả về null nếu chưa cấu hình link, hoặc có lỗi xảy ra (mất mạng, link sai...) — để nơi gọi
+// hàm này biết mà dùng dữ liệu dự phòng thay thế.
+async function loadMenuFromSheet() {
+  if (!MENU_SHEET_CSV_URL || MENU_SHEET_CSV_URL.includes('DÁN_LINK')) return null;
+
+  try {
+    const response = await fetch(MENU_SHEET_CSV_URL, { cache: 'no-store' });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const csvText = await response.text();
+
+    const rows = parseCSV(csvText);
+    rows.shift(); // bỏ dòng đầu tiên (dòng tiêu đề: category,icon,name,price,desc)
+
+    const data = {};
+    rows.forEach(([category, icon, name, price, desc]) => {
+      const cat = (category || '').trim();
+      if (!cat) return; // dòng thiếu category thì bỏ qua
+      if (!data[cat]) data[cat] = [];
+      data[cat].push({
+        icon: (icon || '').trim(),
+        name: (name || '').trim(),
+        price: (price || '').trim(),
+        desc: (desc || '').trim(),
+      });
+    });
+
+    return Object.keys(data).length ? data : null;
+  } catch (err) {
+    console.warn('Impossible de charger le menu depuis Google Sheets, utilisation des données par défaut.', err);
+    return null;
+  }
+}
 
 // ============ HIỆU ỨNG HEADER KHI CUỘN TRANG ============
 // Lấy 2 phần tử: thanh header và nút "lên đầu trang" để điều khiển bằng JS
@@ -68,29 +160,47 @@ nav.querySelectorAll('a').forEach(link => {
   });
 });
 
-// ============ TAB LỌC THỰC ĐƠN ============
-const menuTabs = document.getElementById('menuTabs'); // khung chứa 4 nút tab
+// ============ TAB LỌC + HIỂN THỊ THỰC ĐƠN ============
+const menuTabs = document.getElementById('menuTabs'); // khung chứa các nút tab (giờ được tạo tự động)
 const menuGrid = document.getElementById('menuGrid');  // khung sẽ chứa danh sách món ăn
 
-// Hàm render (vẽ) danh sách món ăn ra HTML, dựa theo category (ví dụ: "khaivi")
+// renderTabs: tạo các nút tab dựa trên danh mục thực sự có trong dữ liệu (data),
+// sắp xếp theo CATEGORY_ORDER, danh mục lạ (không nằm trong CATEGORY_ORDER) xếp cuối.
+// Trả về mảng thứ tự danh mục để nơi gọi biết nên hiển thị tab nào đầu tiên.
+function renderTabs(data) {
+  const categories = Object.keys(data);
+  const orderedCategories = [
+    ...CATEGORY_ORDER.filter(cat => categories.includes(cat)),
+    ...categories.filter(cat => !CATEGORY_ORDER.includes(cat)),
+  ];
+
+  menuTabs.innerHTML = orderedCategories.map((cat, index) => `
+    <button class="menu__tab${index === 0 ? ' active' : ''}" data-tab="${escapeHtml(cat)}">${escapeHtml(cat)}</button>
+  `).join('');
+
+  return orderedCategories;
+}
+
+// Hàm render (vẽ) danh sách món ăn ra HTML, dựa theo category (ví dụ: "Entrées")
 function renderMenu(category) {
-  const items = MENU_DATA[category] || [];
+  const items = currentMenuData[category] || [];
   // .map() biến mỗi món ăn thành 1 đoạn HTML, rồi .join('') nối tất cả lại thành 1 chuỗi
   menuGrid.innerHTML = items.map(item => `
     <div class="menu-card">
-      <div class="menu-card__img">${item.icon}</div>
+      <div class="menu-card__img">${escapeHtml(item.icon)}</div>
       <div class="menu-card__body">
         <div class="menu-card__top">
-          <h4>${item.name}</h4>
-          <span class="menu-card__price">${item.price}</span>
+          <h4>${escapeHtml(item.name)}</h4>
+          <span class="menu-card__price">${escapeHtml(item.price)}</span>
         </div>
-        <p>${item.desc}</p>
+        <p>${escapeHtml(item.desc)}</p>
       </div>
     </div>
   `).join('');
 }
 
-// Lắng nghe sự kiện click trên CẢ khung menuTabs (thay vì từng nút riêng lẻ) — gọi là "event delegation"
+// Lắng nghe sự kiện click trên CẢ khung menuTabs (thay vì từng nút riêng lẻ) — gọi là "event delegation".
+// Cách này vẫn hoạt động đúng dù các nút tab được renderTabs() tạo ra SAU khi listener này được gắn.
 menuTabs.addEventListener('click', (e) => {
   // e.target.closest('.menu__tab'): tìm nút tab gần nhất chứa phần tử vừa bấm
   const tab = e.target.closest('.menu__tab');
@@ -102,8 +212,19 @@ menuTabs.addEventListener('click', (e) => {
   renderMenu(tab.dataset.tab);
 });
 
-// Hiện sẵn tab "Entrées" (khai vị) ngay khi trang vừa tải
-renderMenu('khaivi');
+// initMenu: hàm khởi động - thử tải thực đơn từ Google Sheets, nếu không được thì dùng dữ liệu dự phòng,
+// sau đó vẽ tab + món ăn đầu tiên. Dùng async/await vì tải dữ liệu qua mạng cần thời gian chờ.
+(async function initMenu() {
+  menuGrid.innerHTML = '<p class="menu-loading">Chargement du menu…</p>';
+
+  const sheetData = await loadMenuFromSheet();
+  if (sheetData) currentMenuData = sheetData; // tải thành công -> dùng dữ liệu thật từ Sheets
+  // Nếu tải thất bại (sheetData === null), currentMenuData vẫn giữ nguyên giá trị mặc định
+  // là FALLBACK_MENU_DATA đã gán lúc khai báo biến ở trên.
+
+  const orderedCategories = renderTabs(currentMenuData);
+  if (orderedCategories.length) renderMenu(orderedCategories[0]);
+})();
 
 // ============ FORM ĐẶT BÀN: KIỂM TRA DỮ LIỆU (VALIDATION) ============
 const form = document.getElementById('reservationForm');

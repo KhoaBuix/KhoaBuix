@@ -358,6 +358,9 @@ input, select, textarea { font-family: inherit; font-size: 1rem; }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
+/* Hiện tạm thời trong lúc JS đang tải dữ liệu thực đơn từ Google Sheets */
+.menu-loading { grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 40px 0; }
+
 /* ===== GALLERY (LƯỚI HÌNH ẢNH) =====
    grid-auto-rows + grid-row: span 2 tạo bố cục lưới không đều nhau (kiểu Pinterest), 2 ô lớn hơn các ô còn lại. */
 .gallery__grid {
